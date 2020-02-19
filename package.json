@@ -1,0 +1,25 @@
+{
+  "name": "first_mern",
+  "version": "1.0.0",
+  "description": "MERN stack",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js"
+  },
+  "keywords": [
+    "MERN",
+    "ReactJS"
+  ],
+  "author": "Alexandr Atanasov <atanasovalexandr@yandex.ru>",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.2.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.1"
+  },
+  "devDependencies": {
+    "concurrently": "^5.1.0",
+    "nodemon": "^2.0.2"
+  }
+}
