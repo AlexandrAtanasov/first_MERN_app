@@ -1,34 +1,99 @@
 const {Router} = require('express');
 const router = Router();
-const bcryptjs = require('bcryptjs');
+const bcrypt = require('bcryptjs');
+const {check, validationResult} = require('express-validator');
+const jwt = require('jsonwebtoken');
 const User = require('../Models/User');
 
 // /api/auth/register
-router.post('register', async (req, res) => {
-    try {
-        const {email, password} = req.body;
-        const candidate = await User.findOne({ email });
+router.post(
+    '/register', 
 
-        if (candidate) { 
-            return res.status(400).json({ message: 'error, invalid user data, try again' });
-        };
+    [
+        // check mail with built-in validator
+        check('email', 'email is incorrect').isEmail(),
+        // check password with built-in validator
+        check('password', 'password is incorrect - minimum length is 6 characters').isLength({ min: 6 }),
+    ],
 
-        const hashedPassword = await bcryptjs.hash(password, 12);
-        const user = new User({ email, password: hashedPassword });
+    async (req, res) => {
+        try {
+            // validate incoming fields
+            const errors = validationResult(req);
 
-        await user.save();
+            // returning to front -  registration message error
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ 
+                    errors: errors.array(),
+                    message: 'incorrect registation data'
+                })
+            };
 
-        res.status(200).json({ message: 'done! new user has been created!' })
-
-    } catch (e) {
-        res.status(500).json({ message: "error, try again" });
+            const {email, password} = req.body;
+            const candidate = await User.findOne({ email });
+            // check users data
+            if (candidate) { 
+                return res.status(400).json({ message: 'error, invalid user data, try again' });
+            };
+            // crypting users password
+            const hashedPassword = await bcrypt.hash(password, 12);
+            // creating new user
+            const user = new User({ email, password: hashedPassword });
+            await user.save();
+            // tell to front what creating done
+            res.status(200).json({ message: 'done! new user has been created!' })
+            
+        } catch (e) {
+            res.status(500).json({ message: "error, try again" });
+        }
     }
-});
+);
+
+
 
 // /api/auth/login
-router.post('login', async (req, res) => {
+router.post(
+    '/login', 
 
-});
+    [
+        // check mail with built-in validator
+        check('email', 'enter correct email').normalizeEmail().isEmail(),
+        // check password with built-in validator
+        check('password', 'enter correct password').exists(),
+    ],
+
+    async (req, res) => {
+        try {
+            // validate incoming fields
+            const errors = validationResult(req);
+
+            // returning to front -  registration message error
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ 
+                    errors: errors.array(),
+                    message: 'incorrect registation data'
+                })
+            };
+
+            // get from request user data
+            const { email, password } = req.body;
+            // find this one user in User
+            const user = await User.findOne({ email });
+            // if not find this ine user - return message
+            if (!user) {
+                res.status(400).json({ message: 'this users email is not find' });
+            };
+            // check password from front with db password
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                res.status(400).json({ message: 'incorrect password, please try again' }); 
+            }
+            
+        } catch (e) {
+            res.status(500).json({ message: "error, try again" });
+        }
+    }
+);
 
 
 module.exports = router
