@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const {check, validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const User = require('../Models/User');
+const config = require('config');
 
 // /api/auth/register
 router.post(
@@ -88,6 +89,17 @@ router.post(
             if (!isMatch) {
                 res.status(400).json({ message: 'incorrect password, please try again' }); 
             }
+
+            // create token 
+            const token = jwt.sign(
+                { userId: user.id },
+                config.get('jwtSecret'),
+                // token's lifetime
+                { expiresIn: '1h' }
+            );
+            
+            // default response status = 200
+            res.json({ token, userId: user.id });
             
         } catch (e) {
             res.status(500).json({ message: "error, try again" });
