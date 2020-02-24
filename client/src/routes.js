@@ -4,7 +4,7 @@ import {Switch, Route, Redirect} from 'react-router-dom';
 import {LinksPage} from './Pages/LinksPage';
 import {CreatePage} from './Pages/CreatePage';
 import {DetailPage} from './Pages/DetailPage';
-import {AuthPage}  from './Pages/AuthPage';
+import AuthPage  from './Pages/AuthPage';
 
 export const useRoutes = isAuthenticated => {
     if (isAuthenticated) {
