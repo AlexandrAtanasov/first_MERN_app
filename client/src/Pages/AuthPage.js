@@ -1,14 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import {useHttp} from '../hooks/http.hook';
 
 function AuthPage() {
+    const {loading, request, error} = useHttp();
 
     const [form, setForm] = useState({
         email: '',
         password: ''
     });
 
+    useEffect( () => {
+
+    }, [error]);
+
     const changeHandler = event => {
         setForm({ ...form, [event.target.name]: event.target.value });
+    };
+
+    const registerHandler = async () => {
+        try {
+            const data = request('/api/auth/register', 'POST', {...form});
+            console.log('data - ', data);
+        } catch (e) {
+
+        };
     };
 
     return (
@@ -45,10 +61,18 @@ function AuthPage() {
                         </div>
                     </div>
                     <div className="card-action center-align">
-                        <button className='btn yellow darken-4' style={{marginRight: 10}}>
+                        <button 
+                            className='btn yellow darken-4' 
+                            style={{marginRight: 10}}
+                            disabled={loading}
+                        >
                             Войти
                         </button>
-                        <button className='btn grey lightn-1 black-text'>
+                        <button 
+                            className='btn grey lightn-1 black-text'
+                            onClick={registerHandler}
+                            disabled={loading}
+                        >
                             Регистрация
                         </button>
                     </div>
