@@ -22,7 +22,7 @@ async function start() {
         console.log('Server error, - ', e.message);
         // if has an error - turn off the node server
         process.exit(1);
-    }
+    };
 };
 
 start();
