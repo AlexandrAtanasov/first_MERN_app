@@ -12,9 +12,9 @@ router.post(
 
     [
         // check mail with built-in validator
-        check('email', 'email is incorrect').isEmail(),
+        check('email', 'Email is incorrect').isEmail(),
         // check password with built-in validator
-        check('password', 'password is incorrect - minimum length is 6 characters').isLength({ min: 6 }),
+        check('password', 'Password is incorrect - minimum length is 6 characters').isLength({ min: 6 }),
     ],
 
     async (req, res) => {
@@ -26,7 +26,7 @@ router.post(
             if (!errors.isEmpty()) {
                 return res.status(400).json({ 
                     errors: errors.array(),
-                    message: 'incorrect registation data!'
+                    message: 'Incorrect registation data!'
                 })
             };
 
@@ -34,7 +34,7 @@ router.post(
             const candidate = await User.findOne({ email });
             // check users data
             if (candidate) { 
-                return res.status(400).json({ message: 'error, invalid user data, try again' });
+                return res.status(400).json({ message: 'Such user already exists. Please, try again' });
             };
             // crypting users password
             const hashedPassword = await bcrypt.hash(password, 12);
@@ -42,10 +42,10 @@ router.post(
             const user = new User({ email, password: hashedPassword });
             await user.save();
             // tell to front what creating done
-            res.status(200).json({ message: 'done! new user has been created!' })
+            res.status(200).json({ message: 'Done! New user has been created!' })
             
         } catch (e) {
-            res.status(500).json({ message: "error, try again" });
+            res.status(500).json({ message: "Error, try again" });
         }
     }
 );
@@ -58,9 +58,9 @@ router.post(
 
     [
         // check mail with built-in validator
-        check('email', 'enter correct email').normalizeEmail().isEmail(),
+        check('email', 'Enter correct email').normalizeEmail().isEmail(),
         // check password with built-in validator
-        check('password', 'enter correct password').exists(),
+        check('password', 'Enter correct password').exists(),
     ],
 
     async (req, res) => {
@@ -72,7 +72,7 @@ router.post(
             if (!errors.isEmpty()) {
                 return res.status(400).json({ 
                     errors: errors.array(),
-                    message: 'incorrect registation data'
+                    message: 'Incorrect registation data'
                 })
             };
 
@@ -82,12 +82,12 @@ router.post(
             const user = await User.findOne({ email });
             // if not find this ine user - return message
             if (!user) {
-                res.status(400).json({ message: 'this users email is not find' });
+                res.status(400).json({ message: 'This users email is not find' });
             };
             // check password from front with db password
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
-                res.status(400).json({ message: 'incorrect password, please try again' }); 
+                res.status(400).json({ message: 'Incorrect password. Please, try again' }); 
             }
 
             // create token 
@@ -102,7 +102,7 @@ router.post(
             res.json({ token, userId: user.id });
             
         } catch (e) {
-            res.status(500).json({ message: "error, try again" });
+            res.status(500).json({ message: "Error, try again" });
         }
     }
 );

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import {useHttp} from '../hooks/http.hook';
 import {useMessage} from '../hooks/message.hook';
+import { AuthContext } from '../context/AuthContext';
 
 function AuthPage() {
+    const auth = useContext(AuthContext);
     const message = useMessage();
 
     const {loading, request, error, clearError} = useHttp();
@@ -14,7 +16,6 @@ function AuthPage() {
     });
 
     useEffect( () => {
-        // console.log('Error - ', error);
         message(error);
         clearError();
     }, [error, message, clearError]);
@@ -27,7 +28,15 @@ function AuthPage() {
         try {
             const data = await request('/api/auth/register', 'POST', {...form});
             message(data.message);
-            // console.log('data - ', data);
+        } catch (e) {
+
+        };
+    };
+
+    const loginHandler = async () => {
+        try {
+            const data = await request('/api/auth/login', 'POST', {...form});
+            auth.login(data.token, data.userId);
         } catch (e) {
 
         };
@@ -70,6 +79,7 @@ function AuthPage() {
                         <button 
                             className='btn yellow darken-4' 
                             style={{marginRight: 10}}
+                            onClick={loginHandler}
                             disabled={loading}
                         >
                             Войти
