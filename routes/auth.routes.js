@@ -3,7 +3,7 @@ const router = Router();
 const bcrypt = require('bcryptjs');
 const {check, validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
-const User = require('../Models/User');
+const User = require('../models/User');
 const config = require('config');
 
 // /api/auth/register

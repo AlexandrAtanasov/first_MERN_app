@@ -1,5 +1,6 @@
 {
     "port": 5000,
     "jwtSecret": "this_is_a_random_secret_string",
-    "mongoURI": "mongodb+srv://alex:alexpassword@cluster0-vbl7f.gcp.mongodb.net/test?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://alex:alexpassword@cluster0-vbl7f.gcp.mongodb.net/test?retryWrites=true&w=majority",
+    "baseUrl": "http://localhost:5000"
 }
