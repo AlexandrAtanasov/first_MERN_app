@@ -13,7 +13,7 @@ router.post('/generate', auth, async (req, res) => {
 
         const code = shortid.generate();
 
-        const existing = await Link.find({from});
+        const existing = await Link.findOne({from});
 
         if (existing) {
             return res.json({ link: existing });
@@ -54,6 +54,5 @@ router.get('/:id', auth, async (req, res) => {
     }
 
 });
-
 
 module.exports = router

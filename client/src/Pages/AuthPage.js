@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import {useHttp} from '../hooks/http.hook';
 import {useMessage} from '../hooks/message.hook';
-import { AuthContext } from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 
 function AuthPage() {
     const auth = useContext(AuthContext);
@@ -63,6 +63,7 @@ function AuthPage() {
                                 id="email" 
                                 type="text"  
                                 name="email"
+                                value={form.email}
                                 onChange={changeHandler}  
                                 />
                             <label htmlFor="email">Email</label>
@@ -73,7 +74,8 @@ function AuthPage() {
                                 placeholder="Введите пароль" 
                                 id="password" 
                                 type="password"    
-                                name="password"  
+                                name="password"
+                                value={form.password}
                                 onChange={changeHandler}  
                                 />
                             <label htmlFor="password">Пароль</label>

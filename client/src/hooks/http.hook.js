@@ -8,7 +8,6 @@ export const useHttp = () => {
         setLoading(true);
 
         try {
-
             // cast data to json format and set explicit headers
             if (body) {
                 body = JSON.stringify(body);
