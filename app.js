@@ -1,16 +1,18 @@
 const express = require('express');
 const config = require('config');
 const mongoose = require('mongoose');
-const routes = require('./routes/auth.routes');
-const links = require('./routes/link.routes');
+
+const authRoutes = require('./routes/auth.routes');
+const linksRoutes = require('./routes/link.routes');
+const redirectRoutes = require('./routes/redirect.routes');
 
 const app = express();
 const PORT = config.get('port') || 5000;
 
 app.use(express.json({ extended: true }));
-app.use('/api/auth', routes);
-app.use('/api/link', links);
-
+app.use('/api/auth', authRoutes);
+app.use('/api/link', linksRoutes);
+app.use('/t', redirectRoutes);
 
 async function start() {
     try {
